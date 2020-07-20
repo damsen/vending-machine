@@ -7,13 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -42,11 +36,10 @@ public class CommandResolver {
     }
 
     private void resolve(Command cmd) {
-        if (CommandAccess.USER.equals(cmd.getAccess()) ||
-            (CommandAccess.ADMIN.equals(cmd.getAccess()) && SecurityUtils.isLoggedInAsAdmin())) {
-            cmd.getCommand().accept(commandHandler);
-        } else {
+        if (CommandAccess.ADMIN.equals(cmd.getAccess()) && !SecurityUtils.isLoggedInAsAdmin()) {
             System.err.println("You need admin rights to use that command.");
+        } else {
+            cmd.getCommand().accept(commandHandler);
         }
     }
 

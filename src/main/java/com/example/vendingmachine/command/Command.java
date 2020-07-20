@@ -2,12 +2,11 @@ package com.example.vendingmachine.command;
 
 import lombok.Getter;
 
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.example.vendingmachine.command.CommandAccess.*;
+import static com.example.vendingmachine.command.CommandAccess.ADMIN;
+import static com.example.vendingmachine.command.CommandAccess.USER;
 
 @Getter
 public enum Command {
