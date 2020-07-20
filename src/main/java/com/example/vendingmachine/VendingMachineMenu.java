@@ -1,7 +1,6 @@
 package com.example.vendingmachine;
 
-import com.example.vendingmachine.command.*;
-import org.springframework.core.annotation.AnnotationUtils;
+import com.example.vendingmachine.command.Command;
 
 import java.util.stream.Stream;
 
