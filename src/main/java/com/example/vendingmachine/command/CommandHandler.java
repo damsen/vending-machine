@@ -38,7 +38,6 @@ public class CommandHandler {
         scanner.close();
     }
 
-    @CommandMapping(command = Command.LOGIN)
     public void loginCommand() {
         if (SecurityUtils.isLoggedIn()) {
             System.err.println("You are already logged in.");
@@ -59,7 +58,6 @@ public class CommandHandler {
         }
     }
 
-    @CommandMapping(command = Command.LOGOUT)
     public void logoutCommand() {
         if (!SecurityUtils.isLoggedIn()) {
             System.out.println("You are not logged in.");
@@ -71,7 +69,6 @@ public class CommandHandler {
         VendingMachineMenu.showMainMenu();
     }
 
-    @CommandMapping(command = Command.PRODUCTS)
     public void showProductsCommand() {
         System.out.println("Available products:");
         productService.getProducts()
@@ -86,7 +83,6 @@ public class CommandHandler {
                 });
     }
 
-    @CommandMapping(command = Command.BUY)
     public void buyProductCommand() {
         try {
             System.out.println("What product would you like to buy?");
@@ -99,7 +95,6 @@ public class CommandHandler {
         }
     }
 
-    @CommandMapping(command = Command.MACHINE_STATE, access = CommandAccess.ADMIN)
     public void readMachineStateCommand() {
         try {
             machineStateService.readMachineState();

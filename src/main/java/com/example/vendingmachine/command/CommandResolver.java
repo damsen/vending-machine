@@ -31,10 +31,7 @@ public class CommandResolver {
                 if (Command.QUIT.equals(cmd)) {
                     break;
                 }
-                Stream.of(commandHandler.getClass().getMethods())
-                        .filter(method -> selectCommand(cmd, method))
-                        .findFirst()
-                        .ifPresent(this::resolveCommand);
+                resolve(cmd);
             } catch (CommandNotFoundException e) {
                 System.err.println(e.getMessage());
             }
@@ -44,23 +41,13 @@ public class CommandResolver {
         System.exit(SpringApplication.exit(ctx, () -> 0));
     }
 
-    private boolean selectCommand(Command cmd, Method method) {
-        CommandMapping annotation = AnnotationUtils.getAnnotation(method, CommandMapping.class);
-        return annotation != null && cmd.equals(annotation.command());
-    }
-
-    private void resolveCommand(Method method) {
-        try {
-            CommandMapping annotation = AnnotationUtils.getAnnotation(method, CommandMapping.class);
-            Assert.notNull(annotation, "Missing @CommandMapping annotation on received method.");
-            if (CommandAccess.USER.equals(annotation.access()) ||
-                (CommandAccess.ADMIN.equals(annotation.access()) && SecurityUtils.isLoggedInAsAdmin())) {
-                method.invoke(commandHandler);
-            } else {
-                System.err.println("You need admin rights to use that command.");
-            }
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            System.err.println("Oops! An error occurred while trying to execute the command...");
+    private void resolve(Command cmd) {
+        if (CommandAccess.USER.equals(cmd.getAccess()) ||
+            (CommandAccess.ADMIN.equals(cmd.getAccess()) && SecurityUtils.isLoggedInAsAdmin())) {
+            cmd.getCommand().accept(commandHandler);
+        } else {
+            System.err.println("You need admin rights to use that command.");
         }
     }
+
 }
