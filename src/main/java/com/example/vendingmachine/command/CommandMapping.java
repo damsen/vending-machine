@@ -11,5 +11,4 @@ public @interface CommandMapping {
 
     Command command();
 
-    CommandAccess access() default CommandAccess.USER;
 }

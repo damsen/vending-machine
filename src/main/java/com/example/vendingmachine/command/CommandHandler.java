@@ -99,7 +99,7 @@ public class CommandHandler {
         }
     }
 
-    @CommandMapping(command = Command.MACHINE_STATE, access = CommandAccess.ADMIN)
+    @CommandMapping(command = Command.MACHINE_STATE)
     public void readMachineStateCommand() {
         try {
             machineStateService.readMachineState();
