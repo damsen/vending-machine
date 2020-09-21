@@ -23,6 +23,6 @@ public class VendingMachineMenu {
     }
 
     private static void printCommands(Stream<Command> commands) {
-        commands.forEach(command -> System.out.println(String.format(COMMAND_TEMPLATE, command.getKey(), command.getDescription())));
+        commands.forEach(command -> System.out.printf(COMMAND_TEMPLATE + "%n", command.getKey(), command.getDescription()));
     }
 }
