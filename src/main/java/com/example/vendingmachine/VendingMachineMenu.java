@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class VendingMachineMenu {
 
-    public static final String COMMAND_TEMPLATE = "{%s}: to %s";
+    public static final String COMMAND_TEMPLATE = "{%s}: to %s%n";
 
     public static void showMainMenu() {
         System.out.println();
@@ -23,6 +23,6 @@ public class VendingMachineMenu {
     }
 
     private static void printCommands(Stream<Command> commands) {
-        commands.forEach(command -> System.out.printf(COMMAND_TEMPLATE + "%n", command.getKey(), command.getDescription()));
+        commands.forEach(command -> System.out.printf(COMMAND_TEMPLATE, command.getKey(), command.getDescription()));
     }
 }

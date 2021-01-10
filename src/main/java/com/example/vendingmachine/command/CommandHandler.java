@@ -92,10 +92,8 @@ public class CommandHandler {
             System.out.println("What product would you like to buy?");
             Product product = productService.buyProduct(scanner.nextLine());
             System.out.println(product.getName() + " delivered");
-        } catch (ProductNotFoundException ex) {
+        } catch (ProductNotFoundException | ProductOutOfStockException ex) {
             System.err.println(ex.getMessage());
-        } catch (ProductOutOfStockException ex) {
-            System.err.println(ex.getReason());
         }
     }
 
