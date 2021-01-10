@@ -11,5 +11,4 @@ public class VendingMachineApplication {
     public static void main(String[] args) {
         SpringApplication.run(VendingMachineApplication.class, args);
     }
-
 }

@@ -4,10 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class ProductOutOfStockException extends RuntimeException {
 
-    private String reason;
+    public static final String PRODUCT_UNAVAILABLE = "Sorry but this item is not available anymore.\n";
+
+    public ProductOutOfStockException() {
+        super(PRODUCT_UNAVAILABLE);
+    }
+
+    public ProductOutOfStockException(String message) {
+        super(message);
+    }
 }

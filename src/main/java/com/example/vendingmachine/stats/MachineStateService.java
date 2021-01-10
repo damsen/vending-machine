@@ -1,6 +1,5 @@
 package com.example.vendingmachine.stats;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -13,28 +12,22 @@ import java.util.Date;
 import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
 public class MachineStateService {
 
-    private static final Path machineStatePath;
-
     private final StatService statService;
+    private final Path machineStatePath;
 
-    static {
-        String home = System.getProperty("user.home");
-        String desktop = "Desktop";
-        String fileName = "machine-state.txt";
-        machineStatePath = Paths.get(home, desktop, fileName);
+    public MachineStateService(StatService statService) {
+        this.statService = statService;
+        this.machineStatePath = Paths.get(System.getProperty("user.home"), "Desktop", "machine-state.txt");
     }
 
     @Scheduled(fixedRate = 5000, initialDelay = 5000)
     public void writeMachineState() throws IOException {
-
-        String line1 = "Machine state - " + new Date();
-        String line2 = "Total amount sold: " + statService.getTotalAmountSold() + "€";
-        String line3 = "Total product delivered: " + statService.getTotalProductsDelivered();
+        String line1 = String.format("Machine state - %s", new Date());
+        String line2 = String.format("Total amount sold: %f€", statService.getTotalAmountSold());
+        String line3 = String.format("Total product delivered: %d", statService.getTotalProductsDelivered());
         String result = String.join("\n", line1, line2, line3);
-
         Files.write(machineStatePath, result.getBytes());
     }
 

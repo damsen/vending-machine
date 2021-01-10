@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
-    public static final String PRODUCT_UNAVAILABLE = "Sorry but this item is not available anymore.\n";
-    public static final String RELATED_AVAILABLE_PRODUCTS = "Please find below a list of related products available\n%s";
+    public static final String RELATED_AVAILABLE_PRODUCTS = "Please find below a list of related products available\n";
 
     private final ProductRepository productRepo;
     private final StatService statService;
@@ -39,16 +38,13 @@ public class ProductService {
         try {
             product.decrementQuantity();
         } catch (ProductOutOfStockException ex) {
-            List<Product> relatedProducts = productRepo.findByTypeAndQuantityGreaterThan(product.getType(), 0);
-            String message = PRODUCT_UNAVAILABLE;
-            if (!CollectionUtils.isEmpty(relatedProducts)) {
-                String products = relatedProducts.stream()
-                        .map(p -> String.format("-%s", p.getName()))
-                        .collect(Collectors.joining("\n"));
-                message = message.concat(String.format(RELATED_AVAILABLE_PRODUCTS, products));
-            }
-            ex.setReason(message);
-            throw ex;
+            String otherSuggestionsMessage = productRepo
+                    .findByTypeAndQuantityGreaterThan(product.getType(), 0).stream()
+                    .map(p -> String.format("-%s", p.getName()))
+                    .collect(Collectors.joining("\n"));
+            throw new ProductOutOfStockException(ex.getMessage()
+                    .concat(RELATED_AVAILABLE_PRODUCTS)
+                    .concat(otherSuggestionsMessage));
         }
         statService.incrementTotalAmountSold(product.getPrice());
         statService.incrementTotalProductsDelivered();
